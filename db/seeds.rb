@@ -1,7 +1,17 @@
-# This file should contain all the record creation needed to seed the database with its default values.
-# The data can then be loaded with the rails db:seed command (or created alongside the database with db:setup).
-#
-# Examples:
-#
-#   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
-#   Character.create(name: 'Luke', movie: movies.first)
+require 'scrapers/song_scraper'
+
+[
+    'blink-182',
+    'Brand New',
+    'Drake',
+    'Fetty Wap',
+    'Gym Class Heroes',
+    'Katy Perry',
+    'Kendrick Lamar',
+    'Lady Gaga',
+    'Taking Back Sunday',
+    'Taylor Swift'
+].each do |artist_name|
+  Scrapers::SongScraper.new(artist_name).db_insert
+end
+
