@@ -1,5 +1,7 @@
 json.cache! @songs do
-  json.array! @songs do |song|
+  json.total_count @songs.total_count
+
+  json.songs @songs do |song|
     json.partial! song
 
     json.album do

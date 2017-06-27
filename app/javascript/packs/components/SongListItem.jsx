@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 
 function SongListItem(props) {
     return (
-        <li>
+        <li style={{ marginTop: 20}}>
             {props.song.title}
         </li>
     );

@@ -20,7 +20,13 @@ class SearchForm extends React.Component {
 
     searchSubmit = (event) => {
         event.preventDefault();
-        this.props.onSubmit(this.state);
+        let { artistName, albumTitle, songTitle } = this.state;
+        if (artistName.length >= 3 || albumTitle.length >= 3 || songTitle.length >= 3 )
+        this.props.onSubmit({
+            artist_name: artistName,
+            album_title: albumTitle,
+            song_title: songTitle,
+        });
     };
 
     render() {
