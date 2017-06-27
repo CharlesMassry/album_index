@@ -19,3 +19,5 @@
 .byebug_history
 .env
 spec/fixtures/vcr_cassettes/*
+/public/packs
+/node_modules

@@ -1,24 +1,28 @@
-# README
+# Album Index
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+With Album Index you can search through your favorite songs
 
-Things you may want to cover:
+To get started:
 
-* Ruby version
+`git clone 'https://github.com/CharlesMassry/album_index'`
 
-* System dependencies
+`cd album_index`
 
-* Configuration
+`bundle install`
 
-* Database creation
+`rake db:create`
 
-* Database initialization
+`rake db:schema:load`
 
-* How to run the test suite
+To seed the database using the LastFM api, simply go [lastFm](https://www.last.fm/api) and register for an api key,
+then add your api key to a top level `.env` file like `LAST_FM_API_KEY=your_api_key`
 
-* Services (job queues, cache servers, search engines, etc.)
+Then you can run rake db:seed
+`rake db:seed`
 
-* Deployment instructions
+To run the tests:
 
-* ...
+Make sure qmake is installed, [here](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit) are instructions to install based on your OS and package manager
+
+
+
