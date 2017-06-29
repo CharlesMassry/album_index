@@ -1,0 +1,57 @@
+.song-list-container {
+  margin-top: 59px;
+  float: left;
+  overflow: scroll;
+  height: calc(100% - 59px);
+  width: 80%;
+  @media (max-width: 767px) {
+    width: 70%;
+  }
+  @media (max-width: 639px) {
+    width: 100%;
+  }
+}
+
+.song-list {
+  list-style-type: none;
+  padding: 0;
+  margin-left: 20px;
+}
+
+.song-list-item {
+  margin: 10px 0;
+  overflow: auto;
+  &:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 10px;
+  }
+}
+
+.song-left {
+  float: left;
+  width: 100px;
+}
+
+.song-right {
+  float: left;
+  width: calc(100% - 110px);
+  margin-right: 10px;
+}
+
+.song-title {
+  color: #333333;
+}
+
+.song-album {
+  color: #888888;
+}
+
+.song-duration {
+  color: #888888;
+}
+
+.song-artist {
+  color: #333333;
+}
+
+

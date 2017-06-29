@@ -11,6 +11,7 @@ module Scrapers
     }
 
     def initialize(artist_name)
+      raise ArgumentError, 'No API KEY' if !API_KEY || API_KEY.empty?
       @artist_name = artist_name
     end
 
@@ -23,7 +24,7 @@ module Scrapers
               api_key: API_KEY,
               format: 'json'
           }
-      }).parsed_response['topalbums']['album']
+      }).parsed_response.dig('topalbums', 'album')
 
       top_albums.first(5).each do |album_response|
         album = Album.create({
@@ -31,7 +32,6 @@ module Scrapers
                                  album_art_url: album_response['image'].find { |image| image['size'] === 'medium' }['#text'],
                                  artist: artist
                              })
-        sleep 1
         songs_response = self.class.get('', {
             query: {
                 method: 'album.getInfo',
@@ -40,7 +40,9 @@ module Scrapers
                 api_key: API_KEY,
                 format: 'json'
             }
-        }).parsed_response['album']['tracks']['track']
+        }).parsed_response.dig('album', 'tracks', 'track')
+
+        next unless songs_response.present?
 
         songs_response.each do |song_response|
           Song.create(

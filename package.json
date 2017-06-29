@@ -37,6 +37,7 @@
     "webpack-merge": "^4.1.0"
   },
   "devDependencies": {
+    "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "webpack-dev-server": "^2.5.0"
   }
 }

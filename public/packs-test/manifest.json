@@ -1,7 +1,0 @@
-{
-  "application.js": "/packs-test/application.js",
-  "components/App.js": "/packs-test/components/App.js",
-  "components/SearchForm.js": "/packs-test/components/SearchForm.js",
-  "components/SongListItem.js": "/packs-test/components/SongListItem.js",
-  "search.js": "/packs-test/search.js"
-}

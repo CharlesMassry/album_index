@@ -2,6 +2,12 @@
 
 With Album Index you can search through your favorite songs
 
+Dependencies:
+
+    - Postgres
+    - Nodejs
+    - Ruby on Rails
+
 To get started:
 
 `git clone 'https://github.com/CharlesMassry/album_index'`
@@ -14,15 +20,15 @@ To get started:
 
 `rake db:schema:load`
 
-To seed the database using the LastFM api, simply go [lastFm](https://www.last.fm/api) and register for an api key,
+To easily add songs to the database using the LastFM api, simply go to [lastFm](https://www.last.fm/api) and register for an api key,
 then add your api key to a top level `.env` file like `LAST_FM_API_KEY=your_api_key`
 
-Then you can run rake db:seed
-`rake db:seed`
+Then you can run `rake scrapers:song_scraper`
+
+You can also add songs using the song scraper rake task i.e. `rake scrapers:artist_scraper["Taylor Swift"]`
+
+To start the app, first run `yarn install` to install the front end dependencies. It is recommended to install the foreman gem, `gem install foreman`, then run `foreman start` and visit the app at `localhost:3000`
 
 To run the tests:
 
-Make sure qmake is installed, [here](https://github.com/thoughtbot/capybara-webkit/wiki/Installing-Qt-and-compiling-capybara-webkit) are instructions to install based on your OS and package manager
-
-
-
+Make sure Google Chrome is installed for the javascript integration tests, and you can run `rake` to execute all of the tests

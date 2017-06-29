@@ -3,29 +3,48 @@ import axios from 'axios';
 
 import SearchForm from './SearchForm';
 import SongListItem from './SongListItem';
-import loadingIcon from '../loading.svg';
+import Header from './Header';
+import loadingIcon from '../images/loading.svg';
+
+const initialState = {
+    songs: [],
+    totalCount: 0,
+    page: 1,
+    isLoading: false,
+    searchParams: {
+        artist_name: '',
+        album_title: '',
+        song_title: ''
+    }
+};
 
 class App extends React.Component {
     componentWillMount() {
         this.state = {
-            songs: [],
-            totalCount: 0,
-            page: 1,
-            isLoading: false,
-            searchParams: {
-                artist_name: '',
-                album_title: '',
-                song_title: ''
-            }
+           ...initialState,
+            isMobile: false
         };
+    }
 
-        document.addEventListener('scroll', this.handleScroll);
+    componentDidMount() {
+        window.addEventListener('resize', this.handleResize);
+        this.songListContainer.addEventListener('scroll', this.handleScroll);
+        this.handleResize();
+    }
+
+    componentWillUnmount() {
+        window.removeEventListener('resize', this.handleResize);
+        this.songListContainer.removeEventListener('scroll', this.handleScroll);
     }
 
     searchSubmit = (params) => {
-        let newState = Object.assign({}, { isLoading: true, page: 1, songs: [] }, { searchParams: params });
-        this.setState(newState);
-        getSearchResults(params, this.state.page).then( response => this.addSongs(response) );
+        this.setState({
+            isLoading: true,
+            page: 1,
+            songs: [],
+            searchParams: params
+        });
+        getSearchResults(params, 1).then( response => this.addSongs(response) );
     };
 
     addSongs(response) {
@@ -37,43 +56,72 @@ class App extends React.Component {
         });
     }
 
+    handleResize = () => {
+        if (!this.resizeTimeout) {
+            this.resizeTimeout = setTimeout(() => {
+                this.resizeTimeout = null;
+                const mobileWidthThreshold = 640;
+                const isMobile = window.innerWidth < mobileWidthThreshold;
+                if (isMobile !== this.state.isMobile) {
+                    this.setState({ isMobile });
+                }
+            }, 66);
+        }
+    };
+
     handleScroll = () => {
-        const scrollFromBottomPosition = 500;
-        const shouldLoadMore = getDocumentHeight() - (window.scrollY + window.innerHeight) < scrollFromBottomPosition;
-        if (shouldLoadMore && !this.state.isLoading && this.state.songs.length !== this.state.totalCount) {
+        const scrollFromBottomPosition = 0;
+        const scrollShouldLoadMore = this.songListContainer.scrollTop + this.songListContainer.offsetHeight - this.songListContainer.scrollHeight === scrollFromBottomPosition;
+        const notLoading = !this.state.isLoading;
+        const moreToLoad = this.state.songs.length !== this.state.totalCount;
+        if (scrollShouldLoadMore && notLoading && moreToLoad) {
             this.setState({ isLoading: true });
             getSearchResults(this.state.searchParams, this.state.page).then( response => this.addSongs(response) );
         }
     };
 
+    backButtonClicked = () => {
+        this.setState(initialState)
+    };
+
+    setSongListContainer = (ref) => {
+        this.songListContainer = ref;
+    };
+
     render() {
         return (
             <div>
-                <SearchForm onSubmit={this.searchSubmit}/>
-                <ul>
-                    { this.state.songs.map( song => <SongListItem key={song.id} song={song}/> )}
-                </ul>
-                { this.state.isLoading && <img src={loadingIcon} width="64" height="64" /> }
+                <Header onBackButtonClick={this.backButtonClicked}
+                        showBackButton={this.state.songs.length > 0 && this.state.isMobile}
+                />
+                <SearchForm isHidden={!shouldDisplayForm(this.state)}
+                            onSubmit={this.searchSubmit}/>
+                <div ref={this.setSongListContainer}
+                     id="songListContainer"
+                     className={`song-list-container ${!shouldDisplaySongs(this.state) ? 'hidden' : ''}`}>
+                    <ul className="song-list">
+                        { this.state.songs.map( song => <SongListItem key={song.id} song={song}/> )}
+                    </ul>
+                     { this.state.isLoading && <img className={this.state.songs.length > 0 ? 'loading-more' : 'loading'} src={loadingIcon} width="64" height="64" /> }
+                </div>
             </div>
         );
     }
 }
 
-function getDocumentHeight() {
-    return Math.max(
-        document.body.scrollHeight, document.documentElement.scrollHeight,
-        document.body.offsetHeight, document.documentElement.offsetHeight,
-        document.body.clientHeight, document.documentElement.clientHeight
-    );
+function shouldDisplayForm(state) {
+    return (state.songs.length === 0 && !state.isLoading) || !state.isMobile;
+}
+
+function shouldDisplaySongs(state) {
+    return state.songs.length > 0 || state.isLoading || !state.isMobile;
 }
 
 function getSearchResults(params, page) {
     return axios.get('/search.json',
         {
             params: {
-                artist_name: params.artist_name,
-                album_title: params.album_title,
-                song_title: params.song_title,
+                ...params,
                 page
             }
         }

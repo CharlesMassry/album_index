@@ -5,7 +5,6 @@ git_source(:github) do |repo_name|
   "https://github.com/#{repo_name}.git"
 end
 
-gem 'coffee-rails', '~> 4.2'
 gem 'jbuilder', '~> 2.5'
 gem 'jquery-rails'
 gem 'kaminari'
@@ -13,7 +12,6 @@ gem 'pg', '~> 0.18'
 gem 'puma', '~> 3.7'
 gem 'rails', '~> 5.1.2'
 gem 'sass-rails', '~> 5.0'
-gem 'turbolinks', '~> 5'
 gem 'uglifier', '>= 1.3.0'
 gem 'webpacker'
 
@@ -26,11 +24,13 @@ group :development, :test do
 end
 
 group :test do
-  gem 'webmock', '~> 3.0.0'
-  gem 'vcr'
   gem 'capybara'
-  gem 'capybara-webkit'
+  gem 'chromedriver-helper'
+  gem 'database_cleaner', '~> 1.6.0'
   gem 'factory_girl_rails'
+  gem 'selenium-webdriver', '~> 3.4.0'
+  gem 'vcr'
+  gem 'webmock', '~> 3.0.0'
 end
 
 group :development do
